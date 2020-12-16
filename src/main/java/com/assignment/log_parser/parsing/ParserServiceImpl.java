@@ -58,4 +58,47 @@ public class ParserServiceImpl implements ParserService {
         return finalResult.toString();
     }
 
+    @Override
+    public String timeCalc(List<LogModel> maskedLogs) {
+        HashMap<MethodUrlMap,LogTimeModel> urlTimeMap = new HashMap<>();
+
+        StringBuilder result = new StringBuilder();
+        for(LogModel logModel : maskedLogs) {
+            MethodUrlMap methodUrlPair = new MethodUrlMap(logModel.getMethod(),logModel.getUrl());
+
+            if(urlTimeMap.containsKey(methodUrlPair)) {
+                LogTimeModel logTimeModel = urlTimeMap.get(methodUrlPair);
+                Float currMin = logTimeModel.getMinTime();
+                Float currMax = logTimeModel.getMaxTime();
+                if(logModel.getResponse_time()<currMin) {
+                    logTimeModel.setMinTime(logModel.getResponse_time());
+                }
+                if(logModel.getResponse_time()>currMax) {
+                    logTimeModel.setMaxTime(logModel.getResponse_time());
+                }
+                logTimeModel.setTotalTime(logTimeModel.getTotalTime() + logModel.getResponse_time());
+                logTimeModel.setCount(logTimeModel.getCount()+1);
+            } else {
+                urlTimeMap.put(methodUrlPair,new LogTimeModel(logModel.getResponse_time()));
+            }
+        }
+
+
+        result.append("Method," +
+                "URL," +
+                "Min Time," +
+                "Max Time," +
+                "Average Time\n");
+
+        urlTimeMap.forEach((key, value) -> result.append(key.getMethod())
+                .append(",").append(key.getUrl())
+                .append(",").append(value.getMinTime())
+                .append(",").append(value.getMaxTime())
+                .append(",").append(value.getTotalTime() / value.getCount())
+                .append("\n"));
+
+
+        return result.toString();
+    }
+
 }

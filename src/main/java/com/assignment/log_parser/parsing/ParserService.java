@@ -7,4 +7,6 @@ public interface ParserService {
     List<LogModel> maskIntInUrl(List<LogModel> logModels);
 
     String topUrls(List<LogModel> maskedLogs, int topCount);
+
+    String timeCalc(List<LogModel> maskedLogs);
 }

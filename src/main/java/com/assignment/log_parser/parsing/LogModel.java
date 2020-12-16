@@ -4,10 +4,10 @@ public class LogModel {
     private Long timestamp;
     private String url;
     private String method;
-    private Integer response_time;
+    private Float response_time;
     private Integer response_code;
 
-    public LogModel(Long timestamp, String url, String method, Integer response_time, Integer response_code) {
+    public LogModel(Long timestamp, String url, String method, Float response_time, Integer response_code) {
         this.timestamp = timestamp;
         this.url = url;
         this.method = method;
@@ -50,11 +50,11 @@ public class LogModel {
         this.method = method;
     }
 
-    public Integer getResponse_time() {
+    public Float getResponse_time() {
         return response_time;
     }
 
-    public void setResponse_time(Integer response_time) {
+    public void setResponse_time(Float response_time) {
         this.response_time = response_time;
     }
 

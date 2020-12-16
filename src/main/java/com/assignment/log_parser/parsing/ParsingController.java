@@ -32,20 +32,25 @@ public class ParsingController {
             while (line != null) {
                 String[] log = line.split(splitBy);
                 logModelList.add(new LogModel(Long.parseLong(log[0]),log[1],log[2],
-                        Integer.parseInt(log[3]),Integer.parseInt(log[4])));
+                        Float.parseFloat(log[3]),Integer.parseInt(log[4])));
                 line = input.readLine();
             }
             List<LogModel> maskedLogs = parserService.maskIntInUrl(logModelList);
             String nativeDir = filepath.substring(0, filepath.lastIndexOf(File.separator));
 
             String topUrls = parserService.topUrls(maskedLogs, 5);
+            String timeComputations = parserService.timeCalc(maskedLogs);
 
             input.close();
-            PrintStream out = new PrintStream(new FileOutputStream(nativeDir + "/topUrls.csv"));
+            PrintStream timeUrls = new PrintStream(new FileOutputStream(nativeDir + "/topUrls.csv"));
+            PrintStream timeCalc = new PrintStream(new FileOutputStream(nativeDir + "/timeCalc.csv"));
             System.out.println(nativeDir);
             System.out.println(topUrls);
-            out.append(topUrls);
-            out.close();
+            System.out.println(timeCalc);
+            timeUrls.append(topUrls);
+            timeUrls.close();
+            timeCalc.append(timeComputations);
+            timeCalc.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
